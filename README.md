@@ -1,4 +1,3 @@
-Certainly! Here is the entire content in a single README.md file:
 
 ```markdown
 # Node.js Project with Prisma ORM for Product Management API
