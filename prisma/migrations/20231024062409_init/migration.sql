@@ -1,32 +1,30 @@
 -- CreateEnum
-CREATE TYPE "UpdateStatus" AS ENUM ('IN_PROGRESS', 'SHIPPED', 'DEPRECATED');
+CREATE TYPE "UpdateStatus" AS ENUM ('IN_PROGRESS', 'DONE', 'DEPRECATED');
 
 -- CreateTable
-CREATE TABLE "USER" (
+CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "USER_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "PRODUCT" (
+CREATE TABLE "Product" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "deletedAt" TIMESTAMP(3),
     "belongsToid" TEXT NOT NULL,
 
-    CONSTRAINT "PRODUCT_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UPDATE" (
+CREATE TABLE "Update" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -37,11 +35,11 @@ CREATE TABLE "UPDATE" (
     "asset" TEXT,
     "productId" TEXT NOT NULL,
 
-    CONSTRAINT "UPDATE_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Update_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UPDATEPOINT" (
+CREATE TABLE "Updatepoint" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -49,17 +47,20 @@ CREATE TABLE "UPDATEPOINT" (
     "description" TEXT NOT NULL,
     "updateId" TEXT NOT NULL,
 
-    CONSTRAINT "UPDATEPOINT_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Updatepoint_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "USER_username_key" ON "USER"("username");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Product_id_belongsToid_key" ON "Product"("id", "belongsToid");
 
 -- AddForeignKey
-ALTER TABLE "PRODUCT" ADD CONSTRAINT "PRODUCT_belongsToid_fkey" FOREIGN KEY ("belongsToid") REFERENCES "USER"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_belongsToid_fkey" FOREIGN KEY ("belongsToid") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UPDATE" ADD CONSTRAINT "UPDATE_productId_fkey" FOREIGN KEY ("productId") REFERENCES "PRODUCT"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Update" ADD CONSTRAINT "Update_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UPDATEPOINT" ADD CONSTRAINT "UPDATEPOINT_updateId_fkey" FOREIGN KEY ("updateId") REFERENCES "UPDATE"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Updatepoint" ADD CONSTRAINT "Updatepoint_updateId_fkey" FOREIGN KEY ("updateId") REFERENCES "Update"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

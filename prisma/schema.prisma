@@ -10,34 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model USER {
+model User {
   id        String    @id @default(uuid())
   username  String    @unique
   password  String
   createdAt DateTime  @default(now())
-  products  PRODUCT[]
+  products  Product[]
 }
 
-model PRODUCT {
-  id          String    @id @default(uuid())
+model Product {
+  id          String   @id @default(uuid())
   name        String
   description String
-  price       Float
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   belongsToid String
-  belongsTo   USER      @relation(fields: [belongsToid], references: [id])
-  UPDATE      UPDATE[]
+  belongsTo   User     @relation(fields: [belongsToid], references: [id])
+  updates     Update[]
+
+  @@unique([id, belongsToid], name: "uniqueProduct")
 }
 
 enum UpdateStatus {
   IN_PROGRESS
-  SHIPPED
+  DONE
   DEPRECATED
 }
 
-model UPDATE {
+model Update {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -48,12 +48,12 @@ model UPDATE {
   version String?
   asset   String?
 
-  productId   String
-  product     PRODUCT       @relation(fields: [productId], references: [id])
-  UPDATEPOINT UPDATEPOINT[]
+  productId    String
+  product      Product       @relation(fields: [productId], references: [id])
+  updatePoints Updatepoint[]
 }
 
-model UPDATEPOINT {
+model Updatepoint {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,5 +62,5 @@ model UPDATEPOINT {
   description String
 
   updateId String
-  update   UPDATE @relation(fields: [updateId], references: [id])
+  update   Update @relation(fields: [updateId], references: [id])
 }

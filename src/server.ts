@@ -1,9 +1,10 @@
 // Import dependencies
 import express from 'express';
 import bodyParser from 'body-parser';
-import { Productrouter } from './Router';
+import { Productrouter, UpdatePointsRouter, UpdateRouter } from './Router';
 import morgan from 'morgan';
 import { protect } from './modules/auth';
+import { createUser, signInUser } from './handlers/user';
 
 // Create a new instance of the express server
 const app = express();
@@ -17,5 +18,10 @@ app.get('/', (req, res) => {
 );
 
 app.use('/api', protect, Productrouter)
+app.use('/api', protect, UpdateRouter)
+app.use('/api', protect, UpdatePointsRouter)
+
+app.post('/user/', createUser)
+app.post('/user/signin', signInUser)
 
 export default app;
