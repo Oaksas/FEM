@@ -1,8 +1,8 @@
 import prisma from "../utils/db";
 
 
-//Get all products
-export const getProducts = async (req, res) => {
+//Get all updatePoints
+export const getpdatePoints = async (req, res) => {
 
     const user = await prisma.user.findUnique({
         where: {
@@ -18,23 +18,17 @@ export const getProducts = async (req, res) => {
 
 //Get a single product
 export const getProductById = async (req, res) => {
-    try {
-        const product = await prisma.product.findUnique({
-            where: {
-                id: req.params.id,
-                belongsToid: req.user.id,
-            },
-        });
 
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
+    const product = await prisma.product.findUnique({
+        where: {
+            id: req.params.id,
+            belongsToid: req.user.id
         }
-
-        res.status(200).json({ data: product });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
     }
-};
+    )
+    product ? res.status(204).json({ data: product }) : res.status(200).json({ data: product })
+
+}
 
 //Create a product
 export const createProduct = async (req, res) => {

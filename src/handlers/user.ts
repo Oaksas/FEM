@@ -23,7 +23,6 @@ export const createUser = async (req, res) => {
     }
 
 
-
 }
 
 export const signInUser = async (req, res) => {
