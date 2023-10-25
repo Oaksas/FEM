@@ -1,3 +1,4 @@
+import { Console } from "console";
 import prisma from "../utils/db";
 
 
@@ -14,7 +15,7 @@ export const getUpdates = async (req, res) => {
 
     }
     )
-    const updates = products.map((product) => product.updates)
+    const updates = products.reduce((allUpdates, product) => { return [...allUpdates, ...product.updates] }, [])
     res.json({ data: updates })
 }
 
@@ -72,7 +73,7 @@ export const updateUpdate = async (req, res) => {
         const updates = products.reduce((allUpdates, product) => { return [...allUpdates, ...product.updates] }, [])
         const machingUpdates = updates.filter((update) => update.id === req.params.id)
 
-        if (!machingUpdates) {
+        if (machingUpdates.length === 0) {
             return res.status(404).json({ message: "Update not found" })
         }
 

@@ -16,3 +16,7 @@ Productrouter.post('/product',
     handleInputValidation, createProduct)
 
 Productrouter.delete('/product/:id', deleteProductById)
+
+Productrouter.use((err, req, res, next) => {
+    next(err)
+})

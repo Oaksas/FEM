@@ -25,4 +25,8 @@ UpdateRouter.put('/update/:id',
     check('version').optional(), handleInputValidation,
     updateUpdate)
 UpdateRouter.delete('/update/:id', deleteUpdateById)
+UpdateRouter.use((err, req, res, next) => {
+    next(err)
+})
+
 

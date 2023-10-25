@@ -1,8 +1,9 @@
 import { createJWT } from '../modules/auth'
 import { comparePassword, hashPassword } from '../utils'
 import prisma from '../utils/db'
+import { ErrorType } from '../utils/enums'
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
 
     const hashedPass = await hashPassword(req.body.password)
 
@@ -19,7 +20,8 @@ export const createUser = async (req, res) => {
         res.json({ token })
     }
     catch (err) {
-        res.json({ "message": err })
+        err.type = ErrorType.Auth
+        next(err)
     }
 
 

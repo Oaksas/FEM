@@ -23,3 +23,6 @@ UpdatePointsRouter.post('/updatepoint',
 UpdatePointsRouter.delete('/updatepoint/:id', () => {
 })
 
+UpdatePointsRouter.use((err, req, res, next) => {
+    next(err)
+})

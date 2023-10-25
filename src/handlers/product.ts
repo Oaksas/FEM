@@ -1,4 +1,5 @@
 import prisma from "../utils/db";
+import { ErrorType } from "../utils/enums";
 
 
 //Get all products
@@ -37,7 +38,7 @@ export const getProductById = async (req, res) => {
 };
 
 //Create a product
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
 
     try {
         const product = await prisma.product.create({
@@ -49,9 +50,9 @@ export const createProduct = async (req, res) => {
         }
         )
         res.status(201).json({ data: product })
-    } catch (error) {
-
-        res.status(500).json({ message: error.message })
+    } catch (err) {
+        err.type = ErrorType.Internal
+        next(err)
 
     }
 }
